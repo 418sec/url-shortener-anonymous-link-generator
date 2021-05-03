@@ -1,6 +1,12 @@
 <?php 
+$url_regex = "/(https?:\/\/)?([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w-]*)*\/?\??([^#\n\r]*)?#?([^\n\r]*)/i"; // copied from https://regexr.com/39p0t
+
 if(isset($_GET['url'])){
-    $url = $_GET["url"];
+    $url = htmlspecialchars($_GET["url"]); // XSS sanitization
+	if(preg_match($url_regex, $url)!==1) // prevent unwanted protocols like javascript:alert(1)
+	{
+		exit(header("Location: /index.php"));
+	}
 }
 ?>
 <!DOCTYPE html>
